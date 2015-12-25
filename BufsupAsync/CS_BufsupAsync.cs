@@ -7,7 +7,7 @@ using LRSkipAsync;
 
 namespace BufsupAsync
 {
-    public class CS_Bufsup
+    public class CS_BufsupAsync
     {
         #region 共有領域
         CS_RskipAsync rskip;             // 右側余白情報を削除
@@ -77,7 +77,7 @@ namespace BufsupAsync
         #endregion
 
         #region コンストラクタ
-        public CS_Bufsup()
+        public CS_BufsupAsync()
         {   // コンストラクタ
             _wbuf = null;       // 設定情報無し
             _empty = true;

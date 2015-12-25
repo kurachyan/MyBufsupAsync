@@ -5,6 +5,11 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BufsupAsync", "BufsupAsync.csproj", "{3C79B0FA-B3E2-4CA2-B5BD-37BB65A17B5A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "..\UnitTest\UnitTest.csproj", "{7CFBFD04-2EFA-419C-8D6A-902C4259EEBB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3C79B0FA-B3E2-4CA2-B5BD-37BB65A17B5A} = {3C79B0FA-B3E2-4CA2-B5BD-37BB65A17B5A}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,7 +19,10 @@ Global
 		{3C79B0FA-B3E2-4CA2-B5BD-37BB65A17B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C79B0FA-B3E2-4CA2-B5BD-37BB65A17B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C79B0FA-B3E2-4CA2-B5BD-37BB65A17B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C79B0FA-B3E2-4CA2-B5BD-37BB65A17B5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CFBFD04-2EFA-419C-8D6A-902C4259EEBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CFBFD04-2EFA-419C-8D6A-902C4259EEBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CFBFD04-2EFA-419C-8D6A-902C4259EEBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CFBFD04-2EFA-419C-8D6A-902C4259EEBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
