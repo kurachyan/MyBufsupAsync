@@ -14,9 +14,9 @@ namespace UnitTest
             CS_BufsupAsync bufsup = new CS_BufsupAsync();
 
             #region 対象：コードのみ
-            bufsup.Clear();
+            bufsup.ClearAsync();
             bufsup.Wbuf = @"This is a Pen.";
-            bufsup.Exec();
+            bufsup.ExecAsync();
 
             Assert.IsFalse(bufsup.Remark);
             Assert.AreEqual("This is a Pen.", bufsup.Wbuf, "Wbuf[This is a Pen.]");
@@ -24,9 +24,9 @@ namespace UnitTest
             #endregion
 
             #region 対象：コメントのみ１
-            bufsup.Clear();
+            bufsup.ClearAsync();
             bufsup.Wbuf = @"// This is a Pen.";
-            bufsup.Exec();
+            bufsup.ExecAsync();
 
             Assert.IsFalse(bufsup.Remark);
             Assert.IsNull(bufsup.Wbuf);
@@ -34,9 +34,9 @@ namespace UnitTest
             #endregion
 
             #region 対象：コメントのみ２
-            bufsup.Clear();
+            bufsup.ClearAsync();
             bufsup.Wbuf = @"/* This is a Pen. */";
-            bufsup.Exec();
+            bufsup.ExecAsync();
 
             Assert.IsFalse(bufsup.Remark);
             Assert.IsNull(bufsup.Wbuf);
@@ -50,9 +50,9 @@ namespace UnitTest
             CS_BufsupAsync bufsup = new CS_BufsupAsync();
 
             #region 対象：コードとコメント１
-            bufsup.Clear();
+            bufsup.ClearAsync();
             bufsup.Wbuf = @"This is a Pen.  // Test";
-            bufsup.Exec();
+            bufsup.ExecAsync();
 
             Assert.IsFalse(bufsup.Remark);
             Assert.AreEqual("This is a Pen.", bufsup.Wbuf, "Wbuf[This is a Pen.]");
@@ -60,9 +60,9 @@ namespace UnitTest
             #endregion
 
             #region 対象：コードとコメント２
-            bufsup.Clear();
+            bufsup.ClearAsync();
             bufsup.Wbuf = @"This is a Pen.  /* Test */";
-            bufsup.Exec();
+            bufsup.ExecAsync();
 
             Assert.IsFalse(bufsup.Remark);
             Assert.AreEqual("This is a Pen.", bufsup.Wbuf, "Wbuf[This is a Pen.]");
@@ -70,9 +70,9 @@ namespace UnitTest
             #endregion
 
             #region 対象：コードとコメント３－１
-            bufsup.Clear();
+            bufsup.ClearAsync();
             bufsup.Wbuf = @"This is a Pen.  /* Test";
-            bufsup.Exec();
+            bufsup.ExecAsync();
 
             Assert.IsTrue(bufsup.Remark);
             Assert.AreEqual("This is a Pen.", bufsup.Wbuf, "Wbuf[This is a Pen.]");
@@ -82,7 +82,7 @@ namespace UnitTest
             #region 対象：コードとコメント３－２
             Assert.IsTrue(bufsup.Remark);
             bufsup.Wbuf = @"This is a Pen.  */ Test";
-            bufsup.Exec();
+            bufsup.ExecAsync();
 
             Assert.IsFalse(bufsup.Remark);
             Assert.AreEqual("This is a Pen.  ", bufsup.Rem, "Rem[This is a Pen.  ]");
@@ -108,11 +108,11 @@ namespace UnitTest
             };
 
             CS_BufsupAsync bufsup = new CS_BufsupAsync();
-            bufsup.Clear();
+            bufsup.ClearAsync();
 
             #region ソースコード０
-            bufsup.Wbuf = Source[0];
-            bufsup.Exec();
+//            bufsup.Wbuf = Source[0];
+            bufsup.ExecAsync(Source[0]);
 
             Assert.IsFalse(bufsup.Remark);
             Assert.AreEqual(" Sample Code ", bufsup.Rem, "Rem[ Sample Code ]");
@@ -120,8 +120,8 @@ namespace UnitTest
             #endregion
 
             #region ソースコード１
-            bufsup.Wbuf = Source[1];
-            bufsup.Exec();
+//            bufsup.Wbuf = Source[1];
+            bufsup.ExecAsync(Source[1]);
 
             Assert.IsFalse(bufsup.Remark);
             Assert.AreEqual("void main() {", bufsup.Wbuf, "Wbuf[void main() {]");
@@ -129,8 +129,8 @@ namespace UnitTest
             #endregion
 
             #region ソースコード２
-            bufsup.Wbuf = Source[2];
-            bufsup.Exec();
+//            bufsup.Wbuf = Source[2];
+            bufsup.ExecAsync(Source[2]);
 
             Assert.IsFalse(bufsup.Remark);
             Assert.AreEqual("test1();", bufsup.Wbuf, "Wbuf[test1();]");
@@ -138,29 +138,29 @@ namespace UnitTest
             #endregion
 
             #region ソースコード３
-            bufsup.Wbuf = Source[3];
-            bufsup.Exec();
+//            bufsup.Wbuf = Source[3];
+            bufsup.ExecAsync(Source[3]);
 
             Assert.IsTrue(bufsup.Remark);
             #endregion
 
             #region ソースコード４
-            bufsup.Wbuf = Source[4];
-            bufsup.Exec();
+//            bufsup.Wbuf = Source[4];
+            bufsup.ExecAsync(Source[4]);
 
             Assert.IsTrue(bufsup.Remark);
             #endregion
 
             #region ソースコード５
-            bufsup.Wbuf = Source[5];
-            bufsup.Exec();
+//            bufsup.Wbuf = Source[5];
+            bufsup.ExecAsync(Source[5]);
 
             Assert.IsFalse(bufsup.Remark);
             #endregion
 
             #region ソースコード６
-            bufsup.Wbuf = Source[6];
-            bufsup.Exec();
+//            bufsup.Wbuf = Source[6];
+            bufsup.ExecAsync(Source[6]);
 
             Assert.IsFalse(bufsup.Remark);
             Assert.AreEqual("}", bufsup.Wbuf, "Wbuf[}]");

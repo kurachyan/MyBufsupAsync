@@ -39,9 +39,9 @@ namespace BufsupAsync
                         lskip = new CS_LskipAsync();
                     }
                     rskip.Wbuf = _wbuf;
-                    rskip.Exec();
+                    rskip.ExecAsync();
                     lskip.Wbuf = rskip.Wbuf;
-                    lskip.Exec();
+                    lskip.ExecAsync();
                     _wbuf = lskip.Wbuf;
 
                     // 作業の為の下処理
@@ -90,7 +90,7 @@ namespace BufsupAsync
         #endregion
 
         #region モジュール
-        public async Task Clear()
+        public async Task ClearAsync()
         {   // 作業領域の初期化
             _wbuf = null;       // 設定情報無し
             _empty = true;
@@ -100,8 +100,83 @@ namespace BufsupAsync
             rskip = null;
             lskip = null;
         }
-        public async Task Exec()
+        public async Task ExecAsync()
         {   // 構文評価を行う
+            if (!_empty)
+            {   // バッファーに実装有り
+                // 構文評価を行う
+                int _pos;       // 位置情報
+                _rem = null;        // コメント情報初期化
+                Boolean _judge = false;     // Rskip稼働の判断     
+                if (rskip == null || lskip == null)
+                {
+                    rskip = new CS_RskipAsync();
+                    lskip = new CS_LskipAsync();
+                }
+
+                do
+                {
+                    if (_judge == true)
+                    {   // Rskip稼働？                      
+                        await Reskip();          // Rskip・Lskip稼働
+                        _judge = false;
+                        if (_wbuf == null)
+                        {   // 評価対象が存在しない？
+                            break;
+                        }
+                    }
+
+                    _pos = _wbuf.IndexOf(@"//");
+                    if (_pos != -1)
+                    {   // コメント"//"検出？
+                        await Supsub(_pos);
+                        break;
+                    }
+
+                    _pos = _wbuf.IndexOf(@"/*");
+                    if (_pos != -1)
+                    {   // コメント"/*"検出？
+                        await Supsub(_pos);
+                        _remark = true;         // コメント開始
+                        _judge = true;          // Rskip稼働
+                    }
+
+                    _pos = _wbuf.IndexOf(@"*/");
+                    if (_pos != -1)
+                    {   // コメント"*/"検出？
+                        await RSupsub(_pos);
+                        _remark = false;        // コメント終了
+                        _judge = true;          // Rskip稼働
+                    }
+
+                    if (_rem != null)
+                    {   // コメント設定有り？
+                        _pos = _rem.IndexOf(@"*/");
+                        if (_pos != -1)
+                        {   // コメント"*/"検出？
+                            await RRSupsub(_pos);
+                            _remark = false;        // コメント終了
+                            _judge = true;          // Rskip稼働
+                        }
+
+                    }
+                } while (_pos > 0);
+
+                await Reskip();              // Rskip稼働
+                if (_wbuf == null)
+                {   // バッファー情報無し
+                    // _wbuf = null;
+                    _empty = true;
+                }
+
+            }
+
+        }
+
+        public async Task ExecAsync(String msg)
+        {   // 構文評価を行う
+            await SetbufAsync(msg);                 // 入力内容の作業領域設定
+
             if (!_empty)
             {   // バッファーに実装有り
                 // 構文評価を行う
@@ -202,10 +277,43 @@ namespace BufsupAsync
         private async Task Reskip()
         {
             rskip.Wbuf = _wbuf;
-            await rskip.Exec();
+            await rskip.ExecAsync();
             lskip.Wbuf = rskip.Wbuf;
-            await lskip.Exec();
+            await lskip.ExecAsync();
             _wbuf = lskip.Wbuf;
+        }
+        private async Task SetbufAsync(String _strbuf)
+        {   // [_wbuf]情報設定
+            _wbuf = _strbuf;
+            if (_wbuf == null)
+            {   // 設定情報は無し？
+                _empty = true;
+            }
+            else
+            {   // 整形処理を行う
+                // 不要情報削除
+                if (rskip == null || lskip == null)
+                {   // 未定義？
+                    rskip = new CS_RskipAsync();
+                    lskip = new CS_LskipAsync();
+                }
+                rskip.Wbuf = _wbuf;
+                await rskip.ExecAsync();
+                lskip.Wbuf = rskip.Wbuf;
+                await lskip.ExecAsync();
+                _wbuf = lskip.Wbuf;
+
+                // 作業の為の下処理
+                if (_wbuf.Length == 0 || _wbuf == null)
+                {   // バッファー情報無し
+                    // _wbuf = null;
+                    _empty = true;
+                }
+                else
+                {
+                    _empty = false;
+                }
+            }
         }
         #endregion
     }
